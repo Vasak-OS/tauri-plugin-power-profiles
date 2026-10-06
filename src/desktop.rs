@@ -224,7 +224,12 @@ async fn subscribe(conn: &Connection) -> Result<Vec<MessageStream>> {
 }
 
 async fn start(notify: Notify) -> Result<Arc<Backend>> {
-    let conn = Connection::system().await?;
+    start_on(Connection::system().await?, notify).await
+}
+
+/// Arranca sobre una conexión dada: el bus del sistema en el plugin, uno
+/// privado en las pruebas.
+async fn start_on(conn: Connection, notify: Notify) -> Result<Arc<Backend>> {
     let streams = subscribe(&conn).await?;
 
     let backend = Arc::new(Backend {
@@ -363,53 +368,7 @@ mod tests {
             Err(Error::Unavailable)
         ));
     }
-
-    /// Contra el demonio de verdad. No corre en el CI, que no tiene bus del
-    /// sistema; se corre a mano con `cargo test -- --ignored`.
-    #[tokio::test]
-    #[ignore]
-    async fn lee_el_demonio_de_esta_maquina() {
-        let manager = PowerManager::new(Arc::new(|_| {}));
-        let state = manager.state().await;
-        assert!(state.available, "¿está corriendo power-profiles-daemon?");
-        assert!(state.profiles.contains(&"balanced".to_string()));
-        assert!(state.active_profile.is_some());
-    }
-
-    /// Que un cambio hecho por otro proceso llegue por la señal, sin sondeo.
-    /// Cambia el perfil de la máquina un instante y lo devuelve; a mano, con
-    /// `cargo test -- --ignored`.
-    #[tokio::test(flavor = "multi_thread")]
-    #[ignore]
-    async fn se_entera_de_un_cambio_hecho_desde_afuera() {
-        let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel();
-        let manager = PowerManager::new(Arc::new(move |s: &PowerState| {
-            let _ = tx.send(s.clone());
-        }));
-        let before = manager.state().await;
-        let original = before.active_profile.clone().expect("perfil activo");
-        let other = if original == "power-saver" {
-            "balanced"
-        } else {
-            "power-saver"
-        };
-
-        let status = std::process::Command::new("powerprofilesctl")
-            .args(["set", other])
-            .status()
-            .expect("powerprofilesctl");
-        assert!(status.success());
-
-        let seen = tokio::time::timeout(std::time::Duration::from_secs(5), rx.recv())
-            .await
-            .expect("la señal no llegó")
-            .unwrap();
-        assert_eq!(seen.active_profile.as_deref(), Some(other));
-
-        manager.set_profile(&original).await.unwrap();
-        assert_eq!(
-            manager.state().await.active_profile.as_deref(),
-            Some(original.as_str())
-        );
-    }
 }
+
+#[cfg(test)]
+mod bus_tests;

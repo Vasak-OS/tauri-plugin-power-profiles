@@ -85,10 +85,15 @@ Desde Rust, el mismo gestor está en `app.power_manager()` (trait
 ## Pruebas
 
 ```sh
-cargo test                   # las que no necesitan el bus
-cargo test -- --ignored      # contra el demonio de esta máquina (cambia el perfil un instante y lo devuelve)
-bun run test                 # el binding de JavaScript
+cargo test       # incluye las de bus: levantan un dbus-daemon privado con un demonio de mentira
+bun run test     # el binding de JavaScript
 ```
+
+Las pruebas de bus no tocan el demonio de la máquina: arrancan su propio
+`dbus-daemon` y publican ahí un power-profiles-daemon de mentira, con el nombre
+nuevo o con el viejo, para probar la lectura, el cambio de perfil, un cambio
+hecho desde afuera y el demonio que se va y vuelve. Si no hay `dbus-daemon`, lo
+dicen y no fallan.
 
 ## Licencia
 
