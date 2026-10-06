@@ -1,0 +1,6 @@
+[default]
+description = "Leer el perfil de energía y cambiarlo."
+permissions = [
+  "allow-get-power-state",
+  "allow-set-power-profile"
+]
