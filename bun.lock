@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "@vasakgroup/plugin-power-manager",
+      "name": "@vasakgroup/plugin-power-profiles",
       "dependencies": {
         "@tauri-apps/api": "^2.12.1",
       },

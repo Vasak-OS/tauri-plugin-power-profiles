@@ -29,7 +29,7 @@ struct PrivateBus {
 impl PrivateBus {
     fn start() -> Option<Self> {
         let dir = std::env::temp_dir().join(format!(
-            "power-manager-bus-{}-{:?}",
+            "power-profiles-bus-{}-{:?}",
             std::process::id(),
             std::thread::current().id()
         ));
@@ -196,8 +196,8 @@ async fn next(rx: &mut UnboundedReceiver<PowerState>) -> PowerState {
         .expect("canal cerrado")
 }
 
-async fn manager_on(bus: &PrivateBus, notify: Notify) -> PowerManager {
-    let manager = PowerManager::new(Arc::clone(&notify));
+async fn manager_on(bus: &PrivateBus, notify: Notify) -> PowerProfiles {
+    let manager = PowerProfiles::new(Arc::clone(&notify));
     let backend = start_on(bus.connect().await, notify).await.unwrap();
     manager.backend.set(Some(backend)).ok();
     manager

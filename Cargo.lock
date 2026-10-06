@@ -3528,7 +3528,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tauri-plugin-power-manager"
+name = "tauri-plugin-power-profiles"
 version = "2.0.0"
 dependencies = [
  "futures-util",

@@ -1,14 +1,14 @@
 [package]
-name = "tauri-plugin-power-manager"
+name = "tauri-plugin-power-profiles"
 version = "2.0.0"
 authors = [ "Joaquin (Pato) Decima <jdecima@vasak.net.ar>", "Vasak Group" ]
 description = "A Tauri plugin to read and change the power profile (power-profiles-daemon) over D-Bus on Linux."
 edition = "2021"
 rust-version = "1.90"
 exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
-links = "tauri-plugin-power-manager"
+links = "tauri-plugin-power-profiles"
 license = "GPL-3.0-or-later"
-repository = "https://github.com/Vasak-OS/tauri-plugin-power-manager"
+repository = "https://github.com/Vasak-OS/tauri-plugin-power-profiles"
 keywords = ["tauri", "tauri-plugin", "power-profiles", "linux", "dbus"]
 
 [dependencies]

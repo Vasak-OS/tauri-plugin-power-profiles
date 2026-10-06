@@ -16,7 +16,7 @@ const state = {
 	performanceDegraded: null,
 };
 
-describe('power-manager desde el frontend', () => {
+describe('power-profiles desde el frontend', () => {
 	beforeEach(() => {
 		invokeMock.mockClear();
 		listenMock.mockClear();
@@ -27,7 +27,7 @@ describe('power-manager desde el frontend', () => {
 		const mod = await import('./index');
 
 		expect(await mod.getPowerState()).toEqual(state);
-		expect(invokeMock).toHaveBeenCalledWith('plugin:power-manager|get_power_state');
+		expect(invokeMock).toHaveBeenCalledWith('plugin:power-profiles|get_power_state');
 	});
 
 	it('cambia el perfil con el nombre del argumento que espera Rust', async () => {
@@ -36,7 +36,7 @@ describe('power-manager desde el frontend', () => {
 
 		const next = await mod.setPowerProfile('performance');
 
-		expect(invokeMock).toHaveBeenCalledWith('plugin:power-manager|set_power_profile', {
+		expect(invokeMock).toHaveBeenCalledWith('plugin:power-profiles|set_power_profile', {
 			profile: 'performance',
 		});
 		expect(next.activeProfile).toBe('performance');

@@ -19,7 +19,7 @@ Leer el perfil de energía y cambiarlo.
 <tr>
 <td>
 
-`power-manager:allow-get-power-state`
+`power-profiles:allow-get-power-state`
 
 </td>
 <td>
@@ -32,7 +32,7 @@ Enables the get_power_state command without any pre-configured scope.
 <tr>
 <td>
 
-`power-manager:deny-get-power-state`
+`power-profiles:deny-get-power-state`
 
 </td>
 <td>
@@ -45,7 +45,7 @@ Denies the get_power_state command without any pre-configured scope.
 <tr>
 <td>
 
-`power-manager:allow-set-power-profile`
+`power-profiles:allow-set-power-profile`
 
 </td>
 <td>
@@ -58,7 +58,7 @@ Enables the set_power_profile command without any pre-configured scope.
 <tr>
 <td>
 
-`power-manager:deny-set-power-profile`
+`power-profiles:deny-set-power-profile`
 
 </td>
 <td>

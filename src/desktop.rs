@@ -62,12 +62,12 @@ struct Backend {
 /// La conexión se abre la primera vez que alguien la necesita —o al arrancar,
 /// en segundo plano— y nunca en el `setup` del plugin: una aplicación no tiene
 /// por qué esperar al bus del sistema para abrir su ventana.
-pub struct PowerManager {
+pub struct PowerProfiles {
     backend: OnceCell<Option<Arc<Backend>>>,
     notify: Notify,
 }
 
-impl PowerManager {
+impl PowerProfiles {
     pub fn new(notify: Notify) -> Self {
         Self {
             backend: OnceCell::new(),
@@ -81,7 +81,7 @@ impl PowerManager {
                 match start(Arc::clone(&self.notify)).await {
                     Ok(backend) => Some(backend),
                     Err(e) => {
-                        log::warn!("power-manager: sin bus del sistema: {e}");
+                        log::warn!("power-profiles: sin bus del sistema: {e}");
                         None
                     }
                 }
@@ -177,7 +177,7 @@ async fn reload(backend: &Backend) -> PowerState {
                 found = Some((service, state));
                 break;
             }
-            Err(e) => log::debug!("power-manager: {} no contesta: {e}", service.name),
+            Err(e) => log::debug!("power-profiles: {} no contesta: {e}", service.name),
         }
     }
 
@@ -309,7 +309,7 @@ async fn listen(backend: Arc<Backend>, streams: Vec<MessageStream>, notify: Noti
     // Sin conexión no llegan más señales ni se puede cambiar nada: la copia
     // dejaría de ser cierta y el selector parecería usable. Se lo da por no
     // disponible y se avisa, en vez de seguir mostrando el último estado.
-    log::warn!("power-manager: se cerró la conexión con el bus del sistema");
+    log::warn!("power-profiles: se cerró la conexión con el bus del sistema");
     if let Ok(mut service) = backend.service.lock() {
         *service = None;
     }
@@ -369,7 +369,7 @@ mod tests {
     #[tokio::test]
     async fn sin_bus_el_estado_es_no_disponible_y_no_un_error() {
         // Un gestor cuyo arranque falló se comporta como «no hay demonio».
-        let manager = PowerManager::new(Arc::new(|_| {}));
+        let manager = PowerProfiles::new(Arc::new(|_| {}));
         manager.backend.set(None).ok();
 
         assert_eq!(manager.state().await, PowerState::default());

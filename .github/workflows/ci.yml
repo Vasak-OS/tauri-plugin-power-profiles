@@ -23,7 +23,7 @@ jobs:
       # Las pruebas de Rust corren desde el primer día: un plugin de Tauri
       # arrastra webkit2gtk, así que hace falta la lista de `libwebkit2gtk-4.1-dev`
       # más el compilador de C, igual que en tauri-plugin-bluetooth-manager.
-      pruebas_rust: -p tauri-plugin-power-manager
+      pruebas_rust: -p tauri-plugin-power-profiles
       paquetes_rust: libwebkit2gtk-4.1-dev build-essential
       # Nace al día: que no se quede atrás sin que nadie lo vea.
       bibliotecas_cortan: true
@@ -42,7 +42,7 @@ jobs:
   # son de la organización, así que sin esta condición el merge del primer PR
   # publicaría la 2.0.0 en crates.io y en npm en el acto. Se enciende con
   #
-  #   gh variable set PUBLICAR --body true --repo Vasak-OS/tauri-plugin-power-manager
+  #   gh variable set PUBLICAR --body true --repo Vasak-OS/tauri-plugin-power-profiles
   #
   # y a partir de ahí es como en el resto: sube cuando la versión del
   # manifiesto no está en el registro.

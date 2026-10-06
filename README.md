@@ -1,4 +1,4 @@
-# tauri-plugin-power-manager
+# tauri-plugin-power-profiles
 
 Plugin de Tauri para leer y cambiar el **perfil de energía** del equipo
 (`power-saver`, `balanced`, `performance`) a través de
@@ -30,25 +30,25 @@ Es parte de VasakOS: lo usan `vasak-settings` y el centro de control de
 ```toml
 # src-tauri/Cargo.toml
 [dependencies]
-tauri-plugin-power-manager = "2"
+tauri-plugin-power-profiles = "2"
 ```
 
 ```sh
-bun add @vasakgroup/plugin-power-manager
+bun add @vasakgroup/plugin-power-profiles
 ```
 
 ```rust
 tauri::Builder::default()
-    .plugin(tauri_plugin_power_manager::init())
+    .plugin(tauri_plugin_power_profiles::init())
 ```
 
 Y en la capacidad de la ventana:
 
 ```json
-"permissions": ["power-manager:default"]
+"permissions": ["power-profiles:default"]
 ```
 
-`power-manager:default` permite los dos comandos. Escuchar el evento usa el
+`power-profiles:default` permite los dos comandos. Escuchar el evento usa el
 permiso `core:event:default`, que ya viene en `core:default`.
 
 ## Uso
@@ -58,7 +58,7 @@ import {
   getPowerState,
   setPowerProfile,
   onPowerStateChanged,
-} from '@vasakgroup/plugin-power-manager';
+} from '@vasakgroup/plugin-power-profiles';
 
 const state = await getPowerState();
 // { available: true, profiles: ['power-saver', 'balanced', 'performance'],
@@ -79,8 +79,8 @@ const unlisten = await onPowerStateChanged((next) => {
 `performanceDegraded` trae la razón que da el demonio cuando limita el perfil
 de rendimiento (`lap-detected`, `high-operating-temperature`), o `null`.
 
-Desde Rust, el mismo gestor está en `app.power_manager()` (trait
-`PowerManagerExt`).
+Desde Rust, el mismo gestor está en `app.power_profiles()` (trait
+`PowerProfilesExt`).
 
 ## Pruebas
 

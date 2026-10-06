@@ -1,12 +1,12 @@
 {
-  "name": "@vasakgroup/plugin-power-manager",
+  "name": "@vasakgroup/plugin-power-profiles",
   "version": "2.0.0",
   "author": "Joaquin (Pato) Decima <jdecima@vasak.net.ar>",
   "description": "A Tauri plugin to read and change the power profile (power-profiles-daemon) over D-Bus on Linux.",
   "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Vasak-OS/tauri-plugin-power-manager.git"
+    "url": "git+https://github.com/Vasak-OS/tauri-plugin-power-profiles.git"
   },
   "type": "module",
   "types": "./dist-js/index.d.ts",
