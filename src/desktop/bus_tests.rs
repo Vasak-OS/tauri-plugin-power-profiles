@@ -362,3 +362,27 @@ async fn sin_ningun_demonio_arranca_no_disponible() {
     let manager = manager_on(&bus, notify).await;
     assert_eq!(manager.state().await, PowerState::default());
 }
+
+#[tokio::test(flavor = "multi_thread")]
+async fn si_se_cae_el_bus_queda_no_disponible_y_avisa() {
+    let Some(bus) = PrivateBus::start() else {
+        return;
+    };
+    let _daemon = serve_new(&bus).await;
+    let (notify, mut rx) = recorder();
+    let manager = manager_on(&bus, notify).await;
+    assert!(manager.state().await.available);
+
+    drop(bus);
+    let mut seen = next(&mut rx).await;
+    // Puede llegar primero el aviso de que el demonio se fue.
+    while seen.available {
+        seen = next(&mut rx).await;
+    }
+    assert_eq!(seen, PowerState::default());
+    assert_eq!(manager.state().await, PowerState::default());
+    assert!(matches!(
+        manager.set_profile("balanced").await,
+        Err(Error::Unavailable)
+    ));
+}

@@ -306,7 +306,18 @@ async fn listen(backend: Arc<Backend>, streams: Vec<MessageStream>, notify: Noti
         }
     }
 
+    // Sin conexión no llegan más señales ni se puede cambiar nada: la copia
+    // dejaría de ser cierta y el selector parecería usable. Se lo da por no
+    // disponible y se avisa, en vez de seguir mostrando el último estado.
     log::warn!("power-manager: se cerró la conexión con el bus del sistema");
+    if let Ok(mut service) = backend.service.lock() {
+        *service = None;
+    }
+    let gone = PowerState::default();
+    if let Ok(mut state) = backend.state.lock() {
+        *state = gone.clone();
+    }
+    notify(&gone);
 }
 
 #[cfg(test)]
