@@ -1,0 +1,33 @@
+[package]
+name = "tauri-plugin-power-manager"
+version = "2.0.0"
+authors = [ "Joaquin (Pato) Decima <jdecima@vasak.net.ar>", "Vasak Group" ]
+description = "A Tauri plugin to read and change the power profile (power-profiles-daemon) over D-Bus on Linux."
+edition = "2021"
+rust-version = "1.90"
+exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
+links = "tauri-plugin-power-manager"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/Vasak-OS/tauri-plugin-power-manager"
+keywords = ["tauri", "tauri-plugin", "power-profiles", "linux", "dbus"]
+
+[dependencies]
+tauri = { version = "2" }
+# Sin las características por omisión: traen `async-io`, un segundo ejecutor
+# al lado del tokio que ya corre Tauri. Es la misma elección que hace
+# vasak-settings, así que en el binario queda una sola copia.
+zbus = { version = "4", default-features = false, features = ["tokio"] }
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+log = "0.4"
+# Ya viene con tauri: esto pide `sync` (OnceCell y Mutex asíncronos), no otra
+# copia.
+tokio = { version = "1", features = ["sync"] }
+
+[dev-dependencies]
+serde_json = "1.0"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+
+[build-dependencies]
+tauri-plugin = { version = "2", features = ["build"] }
